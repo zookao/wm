@@ -23,23 +23,7 @@ if(strtolower($_SERVER['REQUEST_METHOD']) == 'get'){
         $data = $api->format(true)->url($id);
         $data = json_decode($data,true);
         if($data['url']){
-            file_put_contents('log.txt',$data['url'].PHP_EOL,FILE_APPEND);
-            $fileres = file_get_contents($data['url']);
-            $name = uniqid().'.mp3';
-            file_put_contents($name,$fileres);
-
-            header("Access-Control-Allow-Origin: *");
-            header('Access-Control-Allow-Methods:GET');
-            header('Access-Control-Allow-Headers:*');
-            $file = fopen($name,"rb");
-            Header("Content-type: application/octet-stream");
-            Header("Accept-Ranges: bytes");
-            Header("Content-Length: ".filesize($name));
-            Header("Content-Disposition: attachment; filename=".$name);
-            echo fread($file, filesize($name));
-            fclose($file);
-            unlink($name);
-            exit();
+            echo json_encode(['code' => 1,'data' => $data['url']]);die;
         }else{
             echo json_encode(['code' => 0,'msg' => '获取地址失败']);die;
         }
